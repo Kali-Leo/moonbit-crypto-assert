@@ -1,0 +1,7 @@
+﻿_build/
+target/
+.repos/
+.mooncakes/
+.moe/
+*.moe
+.DS_Store

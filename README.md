@@ -914,7 +914,7 @@ verification library in any language offers this level of assurance.
 
 ## License
 
-MIT License
+Apache 2.0 License
 
 ---
 
