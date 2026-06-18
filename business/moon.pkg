@@ -1,6 +1,7 @@
 import {
   "anonymous0/crypto_assert/protocol",
 }
+
 import {
   "moonbitlang/quickcheck" @qc,
 } for "test"

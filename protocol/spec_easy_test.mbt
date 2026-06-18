@@ -67,16 +67,27 @@ test "TransactionSpec construction and TxValidationCode" {
     unit_desc: "sat/vB",
   }
   let input : @protocol.TxInputSpec = TxInputSpec::{
-    txid: "abc123", vout: 0, script_sig: "sig", amount_str: "100000",
+    txid: "abc123",
+    vout: 0,
+    script_sig: "sig",
+    amount_str: "100000",
   }
   let output : @protocol.TxOutputSpec = TxOutputSpec::{
     address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
-    amount_str: "90000", script_pubkey: "pubkey", is_change: false,
+    amount_str: "90000",
+    script_pubkey: "pubkey",
+    is_change: false,
   }
   let tx : @protocol.TransactionSpec = TransactionSpec::{
-    version: 1, inputs: [input], outputs: [output],
-    locktime: 0, fee: fee, txid: "txid123",
+    version: 1,
+    inputs: [input],
+    outputs: [output],
+    locktime: 0,
+    fee,
+    txid: "txid123",
     sig_scheme: SignatureScheme::EcdsaSecp256k1,
+    signature_hex: None,
+    public_key_hex: None,
   }
   debug_inspect(tx.version, content="1")
   inspect(tx.inputs.length(), content="1")
@@ -86,15 +97,25 @@ test "TransactionSpec construction and TxValidationCode" {
 ///|
 test "SecurityAssertResult values" {
   let safe : @protocol.SecurityAssertResult = SecurityAssertResult::Safe
-  let warning : @protocol.SecurityAssertResult = SecurityAssertResult::Warning("high slippage")
-  let unsafe_val : @protocol.SecurityAssertResult = SecurityAssertResult::Unsafe("reentrancy detected")
+  let warning : @protocol.SecurityAssertResult = SecurityAssertResult::Warning(
+    "high slippage",
+  )
+  let unsafe_val : @protocol.SecurityAssertResult = SecurityAssertResult::Unsafe(
+    "reentrancy detected",
+  )
   debug_inspect(safe, content="Safe")
-  debug_inspect(warning, content=(
-    #|Warning("high slippage")
-  ))
-  debug_inspect(unsafe_val, content=(
-    #|Unsafe("reentrancy detected")
-  ))
+  debug_inspect(
+    warning,
+    content=(
+      #|Warning("high slippage")
+    ),
+  )
+  debug_inspect(
+    unsafe_val,
+    content=(
+      #|Unsafe("reentrancy detected")
+    ),
+  )
 }
 
 ///|
@@ -112,7 +133,9 @@ test "ContractSafetyMode enumeration" {
 ///|
 test "PrecisionSpec and TxValidationCode" {
   let eth_precision : @protocol.PrecisionSpec = PrecisionSpec::{
-    decimals: 18, unit_vals: "1000000000000000000", symbol: "ETH",
+    decimals: 18,
+    unit_vals: "1000000000000000000",
+    symbol: "ETH",
   }
   debug_inspect(eth_precision.decimals, content="18")
 

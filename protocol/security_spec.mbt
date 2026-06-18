@@ -51,11 +51,10 @@ pub(all) struct BridgeSpec {
 /// 安全验证 Trait —— 编译期接口约束
 /// 使用 self 参数确保编译期静态分发，杜绝运行时 NotImplemented 漏洞
 /// ═══════════════════════════════════════
-
 pub trait SecurityVerifier {
-  check_replay_protection(self : Self, TransactionSpec, ReplayProtectionSpec) -> SecurityAssertResult
-  check_contract_safety(self : Self, TokenSafetySpec) -> SecurityAssertResult
-  check_bridge_security(self : Self, BridgeSpec) -> SecurityAssertResult
-  validate_amount_range(self : Self, String, String, String) -> SecurityAssertResult
-  check_fee_ratio(self : Self, String, String, String) -> SecurityAssertResult
+  fn check_replay_protection(self : Self, TransactionSpec, ReplayProtectionSpec) -> SecurityAssertResult
+  fn check_contract_safety(self : Self, TokenSafetySpec) -> SecurityAssertResult
+  fn check_bridge_security(self : Self, BridgeSpec) -> SecurityAssertResult
+  fn validate_amount_range(self : Self, String, String, String) -> SecurityAssertResult
+  fn check_fee_ratio(self : Self, String, String, String) -> SecurityAssertResult
 }

@@ -5,3 +5,4 @@ target/
 .moe/
 *.moe
 .DS_Store
+.clinerules

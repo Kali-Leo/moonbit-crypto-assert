@@ -44,6 +44,8 @@ pub(all) struct TransactionSpec {
   fee : FeeSpec
   txid : String
   sig_scheme : SignatureScheme
+  signature_hex : String?
+  public_key_hex : String?
 } derive(Debug)
 
 ///|
@@ -85,11 +87,10 @@ pub(all) struct SignatureVerifySpec {
 /// 交易验证 Trait —— 编译期接口约束
 /// 使用 self 参数确保编译期静态分发
 /// ═══════════════════════════════════════
-
 pub trait TransactionVerifier {
-  validate_transaction(self : Self, TransactionSpec) -> TxValidationCode
-  verify_signature(self : Self, SignatureVerifySpec) -> Bool
-  compute_txid(self : Self, TransactionSpec) -> String
-  estimate_fee(self : Self, TransactionSpec, String) -> FeeSpec
-  validate_token_transfer(self : Self, TokenTransferSpec) -> TxValidationCode
+  fn validate_transaction(self : Self, TransactionSpec) -> TxValidationCode
+  fn verify_signature(self : Self, SignatureVerifySpec) -> Bool
+  fn compute_txid(self : Self, TransactionSpec) -> String
+  fn estimate_fee(self : Self, TransactionSpec, String) -> FeeSpec
+  fn validate_token_transfer(self : Self, TokenTransferSpec) -> TxValidationCode
 }

@@ -19,11 +19,10 @@ pub fn[V : @protocol.AddressVerifier] assert_address_format(
   let spec = verifier.address_format_spec(expected_type)
   // 1. 前缀检查
   match spec.prefix_req {
-    Some(prefix) => {
-      if !(address.has_prefix(prefix)) {
+    Some(prefix) =>
+      if !address.has_prefix(prefix) {
         raise @protocol.AssertError::InvalidPrefix(address, prefix)
       }
-    }
     None => ()
   }
   // 2. 长度检查 — 使用字符数（min_chars / max_chars），非底层字节数
@@ -31,18 +30,22 @@ pub fn[V : @protocol.AddressVerifier] assert_address_format(
   let min_c = spec.length.min_chars.reinterpret_as_int()
   let max_c = spec.length.max_chars.reinterpret_as_int()
   if addr_len < min_c || addr_len > max_c {
-    raise @protocol.AssertError::InvalidLength(address, spec.length.min_chars, spec.length.max_chars)
+    raise @protocol.AssertError::InvalidLength(
+      address,
+      spec.length.min_chars,
+      spec.length.max_chars,
+    )
   }
   // 3. 字符集检查
   for c in address {
-    if !(spec.charset.contains_char(c)) {
+    if !spec.charset.contains_char(c) {
       raise @protocol.AssertError::InvalidCharacter(address, c)
     }
   }
   // 4. 校验和检查 — Eth 无校验，EthEip55 有 EIP-55，BTC/Tron 有 Base58Check
   if spec.checksum_type != @protocol.ChecksumType::None {
     let checksum_ok = verifier.validate_checksum(expected_type, address)
-    if !(checksum_ok) {
+    if !checksum_ok {
       raise @protocol.AssertError::ChecksumMismatch(address)
     }
   }
@@ -70,7 +73,7 @@ pub fn assert_sig_scheme_compatible(
     (EcdsaSecp256k1, Cosmos) => true
     _ => false
   }
-  if !(compatible) {
+  if !compatible {
     raise @protocol.AssertError::IncompatibleScheme(scheme, addr_type)
   }
   @protocol.AssertionResult::Valid
@@ -79,14 +82,33 @@ pub fn assert_sig_scheme_compatible(
 ///|
 /// 断言交易签名有效
 /// 需要调用方提供实现了 TransactionVerifier trait 的验证器实例
+///
+/// TransactionSpec 现在可携带可选字段 signature_hex 和 public_key_hex，
+/// 调用方在构造 TransactionSpec 时应显式传入签名上下文。
+/// 如果未传入，assert_tx_signature 将抛出 SignatureVerificationFailed。
 pub fn[V : @protocol.TransactionVerifier] assert_tx_signature(
   verifier : V,
   tx : @protocol.TransactionSpec,
 ) -> @protocol.AssertionResult raise @protocol.AssertError {
+  // 从 TransactionSpec 中提取签名上下文
+  let sig_hex = match tx.signature_hex {
+    Some(s) => s
+    None =>
+      raise @protocol.AssertError::SignatureVerificationFailed(
+        "TransactionSpec.signature_hex is None for tx: \{tx.txid}",
+      )
+  }
+  let pk_hex = match tx.public_key_hex {
+    Some(pk) => pk
+    None =>
+      raise @protocol.AssertError::SignatureVerificationFailed(
+        "TransactionSpec.public_key_hex is None for tx: \{tx.txid}",
+      )
+  }
   let verify_spec = @protocol.SignatureVerifySpec::{
     message_hex: tx.txid,
-    signature_hex: "",
-    public_key_hex: "",
+    signature_hex: sig_hex,
+    public_key_hex: pk_hex,
     scheme: tx.sig_scheme,
   }
   let verified = verifier.verify_signature(verify_spec)
