@@ -26,7 +26,6 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      # 🌟 核心修复：更新云端依赖索引
       - name: Update MoonBit Registry
         run: moon update
 
@@ -44,15 +43,15 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
+      # 🌟 核心修复：同时安装 why3 和数学求解器 z3
       - name: Install Why3 / Z3
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y why3
+          sudo apt-get install -y why3 z3
 
       - name: Detect Why3 provers
         run: why3 config detect
 
-      # 🌟 核心修复：更新云端依赖索引
       - name: Update MoonBit Registry
         run: moon update
 
@@ -70,7 +69,6 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
-      # 🌟 核心修复：更新云端依赖索引
       - name: Update MoonBit Registry
         run: moon update
 
