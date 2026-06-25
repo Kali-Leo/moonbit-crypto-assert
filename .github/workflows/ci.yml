@@ -20,15 +20,8 @@ jobs:
 
       - name: Install MoonBit
         run: |
-          set -euxo pipefail
-          export MOON_HOME="${HOME}/.moon"
-          mkdir -p "${MOON_HOME}/bin"
-          if ! command -v moon &>/dev/null; then
-            curl -fsSL https://cli.moonbitlang.com/install/linux_amd64.sh | bash
-          fi
-          ls -la "${MOON_HOME}/bin/"
-          echo "${MOON_HOME}/bin" >> "${GITHUB_PATH}"
-          moon version
+          /bin/bash -c "$(curl -fsSL https://cli.moonbitlang.com/install/linux_amd64.sh)"
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: moon check
         run: moon check
@@ -41,13 +34,8 @@ jobs:
 
       - name: Install MoonBit
         run: |
-          set -euxo pipefail
-          export MOON_HOME="${HOME}/.moon"
-          mkdir -p "${MOON_HOME}/bin"
-          if ! command -v moon &>/dev/null; then
-            curl -fsSL https://cli.moonbitlang.com/install/linux_amd64.sh | bash
-          fi
-          echo "${MOON_HOME}/bin" >> "${GITHUB_PATH}"
+          /bin/bash -c "$(curl -fsSL https://cli.moonbitlang.com/install/linux_amd64.sh)"
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: Install Why3 / Z3
         run: |
@@ -68,13 +56,8 @@ jobs:
 
       - name: Install MoonBit
         run: |
-          set -euxo pipefail
-          export MOON_HOME="${HOME}/.moon"
-          mkdir -p "${MOON_HOME}/bin"
-          if ! command -v moon &>/dev/null; then
-            curl -fsSL https://cli.moonbitlang.com/install/linux_amd64.sh | bash
-          fi
-          echo "${MOON_HOME}/bin" >> "${GITHUB_PATH}"
+          /bin/bash -c "$(curl -fsSL https://cli.moonbitlang.com/install/linux_amd64.sh)"
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
       - name: moon test
         run: moon test -v --target native
